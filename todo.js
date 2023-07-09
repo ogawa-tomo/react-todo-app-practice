@@ -2,7 +2,7 @@
 
 const e = React.createElement;
 
-class ToDos extends React.Component {
+class ToDoApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,9 +36,6 @@ class ToDos extends React.Component {
   }
 
   render() {
-    const todos = this.state.todos.map((todo) => {
-      return <li key={todo.id}>{todo.name}</li>;
-    });
     return (
       <div>
         <form onSubmit={this.addTodo}>
@@ -52,12 +49,24 @@ class ToDos extends React.Component {
           </label>
           <input type="submit" value="登録" />
         </form>
-        <ul>{todos}</ul>
+        <Todos items={this.state.todos} />
       </div>
+    );
+  }
+}
+
+class Todos extends React.Component {
+  render() {
+    return (
+      <ul>
+        {this.props.items.map((item) => (
+          <li key={item.id}>{item.name}</li>
+        ))}
+      </ul>
     );
   }
 }
 
 const domContainer = document.querySelector("#react_todo_app");
 const root = ReactDOM.createRoot(domContainer);
-root.render(e(ToDos));
+root.render(e(ToDoApp));
