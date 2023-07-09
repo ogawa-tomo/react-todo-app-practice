@@ -6,7 +6,7 @@ class ToDos extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todo: "",
+      newTodo: "",
       todos: [
         { id: 1, name: "本を買う" },
         { id: 2, name: "クリーニング屋に行く" },
@@ -14,21 +14,24 @@ class ToDos extends React.Component {
       ],
     };
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.addTodo = this.addTodo.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ todo: event.target.value });
+    this.setState({ newTodo: event.target.value });
   }
 
-  handleSubmit(event) {
-    const ids = this.state.todos.map((todo) => todo.id);
+  addTodo(event) {
+    const newId =
+      this.state.todos.length === 0
+        ? 1
+        : Math.max(...this.state.todos.map((todo) => todo.id)) + 1;
     this.setState((state) => {
       return {
-        todos: [...state.todos, { id: ids + 1, name: this.state.todo }],
+        todos: [...state.todos, { id: newId, name: this.state.newTodo }],
       };
     });
-    this.setState({ todo: "" });
+    this.setState({ newTodo: "" });
     event.preventDefault();
   }
 
@@ -38,12 +41,12 @@ class ToDos extends React.Component {
     });
     return (
       <div>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.addTodo}>
           <label>
             Name:
             <input
               type="text"
-              value={this.state.todo}
+              value={this.state.newTodo}
               onChange={this.handleChange}
             />
           </label>
