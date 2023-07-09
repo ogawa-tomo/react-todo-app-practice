@@ -22,17 +22,15 @@ class ToDoApp extends React.Component {
       this.state.todos.length === 0
         ? 1
         : Math.max(...this.state.todos.map((todo) => todo.id)) + 1;
-    this.setState((state) => {
-      return {
-        todos: [...state.todos, { id: newId, name: name }],
-      };
-    }, this.saveTodo);
+    this.setState(
+      { todos: [...this.state.todos, { id: newId, name: name }] },
+      this.saveTodo,
+    );
   }
 
   updateTodo(todo, newName) {
-    const newTodo = { id: todo.id, name: newName };
     const newTodos = [...this.state.todos];
-    newTodos[this.state.todos.indexOf(todo)] = newTodo;
+    newTodos[this.state.todos.indexOf(todo)] = { id: todo.id, name: newName };
     this.setState({ todos: newTodos }, this.saveTodo);
   }
 
