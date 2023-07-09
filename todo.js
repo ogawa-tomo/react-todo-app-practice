@@ -15,6 +15,7 @@ class ToDoApp extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.addTodo = this.addTodo.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
   }
 
@@ -34,6 +35,13 @@ class ToDoApp extends React.Component {
     });
     this.setState({ newTodo: "" });
     event.preventDefault();
+  }
+
+  updateTodo(todo, newName) {
+    const newTodo = { id: todo.id, name: newName };
+    const newTodos = [...this.state.todos];
+    newTodos[this.state.todos.indexOf(todo)] = newTodo;
+    this.setState({ todos: newTodos });
   }
 
   deleteTodo(todo) {
@@ -59,7 +67,11 @@ class ToDoApp extends React.Component {
         <ul>
           {this.state.todos.map((todo) => (
             <li key={todo.id}>
-              <Todo todo={todo} deleteTodo={this.deleteTodo} />
+              <Todo
+                todo={todo}
+                updateTodo={this.updateTodo}
+                deleteTodo={this.deleteTodo}
+              />
             </li>
           ))}
         </ul>
@@ -74,14 +86,31 @@ class Todo extends React.Component {
     this.state = {
       editing: false,
     };
+    this.startEdit = this.startEdit.bind(this);
+    this.finishEdit = this.finishEdit.bind(this);
+  }
+  startEdit() {
+    console.log("startEdit");
+    this.setState({ editing: true });
+  }
+  finishEdit(newName) {
+    console.log("finishEdit");
+    console.log(newName);
+
+    this.setState({ editing: false });
+    this.props.updateTodo(this.props.todo, newName);
   }
   render() {
     return (
       <div>
         {this.state.editing ? (
-          <EditTodo />
+          <EditTodo todo={this.props.todo} finishEdit={this.finishEdit} />
         ) : (
-          <ShowTodo todo={this.props.todo} deleteTodo={this.props.deleteTodo} />
+          <ShowTodo
+            todo={this.props.todo}
+            startEdit={this.startEdit}
+            deleteTodo={this.props.deleteTodo}
+          />
         )}
       </div>
     );
@@ -89,8 +118,25 @@ class Todo extends React.Component {
 }
 
 class EditTodo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      newName: this.props.todo.name,
+    };
+  }
   render() {
-    return <div>editTodo</div>;
+    return (
+      <div>
+        <form onSubmit={() => this.props.finishEdit(this.state.newName)}>
+          <input
+            type="text"
+            value={this.state.newName}
+            onChange={(e) => this.setState({ newName: e.target.value })}
+          />
+          <input type="submit" value="更新" />
+        </form>
+      </div>
+    );
   }
 }
 
@@ -99,6 +145,7 @@ class ShowTodo extends React.Component {
     return (
       <div>
         {this.props.todo.name}
+        <button onClick={this.props.startEdit}>編集</button>
         <button onClick={() => this.props.deleteTodo(this.props.todo)}>
           削除
         </button>
