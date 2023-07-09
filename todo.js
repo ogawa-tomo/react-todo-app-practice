@@ -15,6 +15,7 @@ class ToDoApp extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.addTodo = this.addTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
   }
 
   handleChange(event) {
@@ -35,6 +36,12 @@ class ToDoApp extends React.Component {
     event.preventDefault();
   }
 
+  deleteTodo(todo) {
+    const newTodo = [...this.state.todos];
+    newTodo.splice(this.state.todos.indexOf(todo), 1);
+    this.setState({ todos: newTodo });
+  }
+
   render() {
     return (
       <div>
@@ -49,7 +56,7 @@ class ToDoApp extends React.Component {
           </label>
           <input type="submit" value="登録" />
         </form>
-        <Todos items={this.state.todos} />
+        <Todos items={this.state.todos} deleteTodo={this.deleteTodo} />
       </div>
     );
   }
@@ -60,7 +67,10 @@ class Todos extends React.Component {
     return (
       <ul>
         {this.props.items.map((item) => (
-          <li key={item.id}>{item.name}</li>
+          <li key={item.id}>
+            {item.name}
+            <button onClick={() => this.props.deleteTodo(item)}>削除</button>
+          </li>
         ))}
       </ul>
     );
