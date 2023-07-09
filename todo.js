@@ -6,7 +6,6 @@ class ToDoApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newTodo: "",
       todos: [
         { id: 1, name: "本を買う" },
         { id: 2, name: "クリーニング屋に行く" },
@@ -18,18 +17,18 @@ class ToDoApp extends React.Component {
     this.deleteTodo = this.deleteTodo.bind(this);
   }
 
-  addTodo(event) {
+  addTodo(name, e) {
+    console.log(name);
     const newId =
       this.state.todos.length === 0
         ? 1
         : Math.max(...this.state.todos.map((todo) => todo.id)) + 1;
     this.setState((state) => {
       return {
-        todos: [...state.todos, { id: newId, name: this.state.newTodo }],
+        todos: [...state.todos, { id: newId, name: name }],
       };
     });
-    this.setState({ newTodo: "" });
-    event.preventDefault();
+    e.preventDefault();
   }
 
   updateTodo(todo, newName) {
@@ -48,17 +47,7 @@ class ToDoApp extends React.Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.addTodo}>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={this.state.newTodo}
-              onChange={(e) => this.setState({ newTodo: e.target.value })}
-            />
-          </label>
-          <input type="submit" value="登録" />
-        </form>
+        <AddTodo addTodo={this.addTodo} />
         <ul>
           {this.state.todos.map((todo) => (
             <li key={todo.id}>
@@ -71,6 +60,35 @@ class ToDoApp extends React.Component {
           ))}
         </ul>
       </div>
+    );
+  }
+}
+
+class AddTodo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+    };
+    this.finishAddTodo = this.finishAddTodo.bind(this);
+  }
+  finishAddTodo(e) {
+    this.setState({ name: "" });
+    this.props.addTodo(this.state.name, e);
+  }
+  render() {
+    return (
+      <form onSubmit={(e) => this.finishAddTodo(e)}>
+        <label>
+          Name:
+          <input
+            type="text"
+            value={this.state.name}
+            onChange={(e) => this.setState({ name: e.target.value })}
+          />
+        </label>
+        <input type="submit" value="登録" />
+      </form>
     );
   }
 }
