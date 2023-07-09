@@ -56,23 +56,27 @@ class ToDoApp extends React.Component {
           </label>
           <input type="submit" value="登録" />
         </form>
-        <Todos items={this.state.todos} deleteTodo={this.deleteTodo} />
+        <ul>
+          {this.state.todos.map((todo) => (
+            <li key={todo.id}>
+              <Todo todo={todo} deleteTodo={this.deleteTodo} />
+            </li>
+          ))}
+        </ul>
       </div>
     );
   }
 }
 
-class Todos extends React.Component {
+class Todo extends React.Component {
   render() {
     return (
-      <ul>
-        {this.props.items.map((item) => (
-          <li key={item.id}>
-            {item.name}
-            <button onClick={() => this.props.deleteTodo(item)}>削除</button>
-          </li>
-        ))}
-      </ul>
+      <div>
+        {this.props.todo.name}
+        <button onClick={() => this.props.deleteTodo(this.props.todo)}>
+          削除
+        </button>
+      </div>
     );
   }
 }
