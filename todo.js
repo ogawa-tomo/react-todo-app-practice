@@ -6,19 +6,18 @@ class ToDoApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [
-        { id: 1, name: "本を買う" },
-        { id: 2, name: "クリーニング屋に行く" },
-        { id: 3, name: "床屋に行く" },
-      ],
+      todos: JSON.parse(localStorage.getItem("todos")) || [],
     };
     this.addTodo = this.addTodo.bind(this);
     this.updateTodo = this.updateTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
   }
 
+  saveTodo() {
+    localStorage.setItem("todos", JSON.stringify(this.state.todos));
+  }
+
   addTodo(name) {
-    console.log(name);
     const newId =
       this.state.todos.length === 0
         ? 1
@@ -27,20 +26,20 @@ class ToDoApp extends React.Component {
       return {
         todos: [...state.todos, { id: newId, name: name }],
       };
-    });
+    }, this.saveTodo);
   }
 
   updateTodo(todo, newName) {
     const newTodo = { id: todo.id, name: newName };
     const newTodos = [...this.state.todos];
     newTodos[this.state.todos.indexOf(todo)] = newTodo;
-    this.setState({ todos: newTodos });
+    this.setState({ todos: newTodos }, this.saveTodo);
   }
 
   deleteTodo(todo) {
     const newTodos = [...this.state.todos];
     newTodos.splice(this.state.todos.indexOf(todo), 1);
-    this.setState({ todos: newTodos });
+    this.setState({ todos: newTodos }, this.saveTodo);
   }
 
   render() {
