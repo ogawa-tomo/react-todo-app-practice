@@ -69,6 +69,32 @@ class ToDoApp extends React.Component {
 }
 
 class Todo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editing: false,
+    };
+  }
+  render() {
+    return (
+      <div>
+        {this.state.editing ? (
+          <EditTodo />
+        ) : (
+          <ShowTodo todo={this.props.todo} deleteTodo={this.props.deleteTodo} />
+        )}
+      </div>
+    );
+  }
+}
+
+class EditTodo extends React.Component {
+  render() {
+    return <div>editTodo</div>;
+  }
+}
+
+class ShowTodo extends React.Component {
   render() {
     return (
       <div>
