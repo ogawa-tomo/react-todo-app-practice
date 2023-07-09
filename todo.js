@@ -17,7 +17,7 @@ class ToDoApp extends React.Component {
     this.deleteTodo = this.deleteTodo.bind(this);
   }
 
-  addTodo(name, e) {
+  addTodo(name) {
     console.log(name);
     const newId =
       this.state.todos.length === 0
@@ -28,7 +28,6 @@ class ToDoApp extends React.Component {
         todos: [...state.todos, { id: newId, name: name }],
       };
     });
-    e.preventDefault();
   }
 
   updateTodo(todo, newName) {
@@ -47,6 +46,7 @@ class ToDoApp extends React.Component {
   render() {
     return (
       <div>
+        <h1>Todo App</h1>
         <AddTodo addTodo={this.addTodo} />
         <ul>
           {this.state.todos.map((todo) => (
@@ -75,18 +75,16 @@ class AddTodo extends React.Component {
   finishAddTodo(e) {
     this.setState({ name: "" });
     this.props.addTodo(this.state.name, e);
+    e.preventDefault();
   }
   render() {
     return (
       <form onSubmit={(e) => this.finishAddTodo(e)}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={this.state.name}
-            onChange={(e) => this.setState({ name: e.target.value })}
-          />
-        </label>
+        <input
+          type="text"
+          value={this.state.name}
+          onChange={(e) => this.setState({ name: e.target.value })}
+        />
         <input type="submit" value="登録" />
       </form>
     );
