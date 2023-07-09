@@ -13,14 +13,9 @@ class ToDoApp extends React.Component {
         { id: 3, name: "床屋に行く" },
       ],
     };
-    this.handleChange = this.handleChange.bind(this);
     this.addTodo = this.addTodo.bind(this);
     this.updateTodo = this.updateTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ newTodo: event.target.value });
   }
 
   addTodo(event) {
@@ -45,9 +40,9 @@ class ToDoApp extends React.Component {
   }
 
   deleteTodo(todo) {
-    const newTodo = [...this.state.todos];
-    newTodo.splice(this.state.todos.indexOf(todo), 1);
-    this.setState({ todos: newTodo });
+    const newTodos = [...this.state.todos];
+    newTodos.splice(this.state.todos.indexOf(todo), 1);
+    this.setState({ todos: newTodos });
   }
 
   render() {
@@ -59,7 +54,7 @@ class ToDoApp extends React.Component {
             <input
               type="text"
               value={this.state.newTodo}
-              onChange={this.handleChange}
+              onChange={(e) => this.setState({ newTodo: e.target.value })}
             />
           </label>
           <input type="submit" value="登録" />
@@ -90,13 +85,9 @@ class Todo extends React.Component {
     this.finishEdit = this.finishEdit.bind(this);
   }
   startEdit() {
-    console.log("startEdit");
     this.setState({ editing: true });
   }
   finishEdit(newName) {
-    console.log("finishEdit");
-    console.log(newName);
-
     this.setState({ editing: false });
     this.props.updateTodo(this.props.todo, newName);
   }
